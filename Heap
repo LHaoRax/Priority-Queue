@@ -1,0 +1,90 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+class MaxPQ
+{
+private:
+	int *data;
+	int count;
+	void swim(int k);
+	void sink(int k);
+	void swap(int i, int j);
+public:
+	MaxPQ(int N);
+	void insert(int key);
+	int delMax();
+	void show();
+};
+MaxPQ::MaxPQ(int N)
+{
+	data = new int[N];
+	count = 0;
+}
+void MaxPQ::swap(int i, int j)
+{
+	int temp = data[i];
+	data[i] = data[j];
+	data[j] = temp;
+}
+void MaxPQ::swim(int k)
+{
+	while (k > 1 && data[k] > data[k / 2]) {
+		swap(k/2, k);
+		k = k / 2;
+	}
+}
+void MaxPQ::sink(int k)
+{
+	while (2*k <= count)
+	{
+		int j = 2 * k;
+		if (j < count && data[j] < data[j + 1]) j++;//找到最大的孩子
+		if (data[k] >= data[j]) break;
+		else {
+			swap(k, j);
+			k = j;
+		}
+	}
+}
+void MaxPQ::insert(int key)
+{
+	cout<<key<<" ";
+	data[++count] = key;
+	swim(count);
+}
+int MaxPQ::delMax()
+{
+	int max = data[1];
+	data[1] = data[count];
+	count--;
+	sink(1);
+	return max;
+}
+void MaxPQ::show()
+{
+	if (count == 0)
+		exit(0);
+	for (int i = 1; i <= count; i++)
+		cout<<data[i]<<" ";
+	cout<<endl;
+}
+void main()
+{
+	MaxPQ q(20);
+	for (int i = 0; i < 10; i++) {
+		q.insert((rand() % (20 - 1)) + 1);
+	}
+	cout<<endl;
+	q.show();
+	for (int i = 0; i < 2; i++) {
+		cout<<q.delMax()<<endl;
+		q.show();
+	}
+
+	system("pause");
+}
+
+
+
+
