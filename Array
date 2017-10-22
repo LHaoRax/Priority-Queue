@@ -1,0 +1,98 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+#define M 10
+class Queue_un
+{
+	int *data;
+	int count;
+	int cur;
+public:
+	Queue_un(int N);
+	void swap(int i, int j);
+	void insert(int key);
+	void insert1(int key);
+	void Delete(int j);
+	void delMax();
+	void show();
+};
+
+void Queue_un::swap(int i, int j) {
+	int temp = data[i];
+	data[i] = data[j];
+	data[j] = temp;
+}
+Queue_un::Queue_un(int N) {
+	count = N;
+	cur = 0;
+	data = new int[N];
+	for (int i = 0; i < N; i++)
+		data[i] = (rand() % (21 - 1)) + 1;
+}
+void Queue_un::delMax()
+{
+	int k = 0;
+	int max = 0;
+	for (int i = 0; i < cur; i++)
+	{
+		if (data[i] > max)
+		{
+			max = data[i];
+			k = i;
+		}
+	}
+	int count = 0;
+	for (int i = 0; i < cur; i++)
+	{
+		if (i != k)
+			data[count++] = data[i];
+	}
+	cur--;
+}
+
+
+void Queue_un::insert(int key)
+{
+	if (cur < M) {
+		data[cur++] = key;
+	}
+	else
+	{
+		delMax();
+		data[cur++] = key;
+	}
+}
+void Queue_un::insert1(int key)
+{
+	int j = cur;
+	int temp = key;
+	while (j > 0 && key < data[j - 1])
+	{
+		data[j] = data[j - 1];
+		j--;
+	}
+	data[j] = temp;
+	cur++;
+	if (cur > M)
+		cur--;
+}
+void Queue_un::show()
+{
+	for (int i = 0; i < cur; i++)
+	{
+		cout<<data[i]<<" ";
+	}
+	cout<<endl;
+}
+
+void main()
+{
+	Queue_un q1(20);
+	for (int i = 0; i < 10; i++)
+		q1.insert1((rand() % (21 - 1)) + 1);
+	q1.show();
+
+	q1.insert1(15);
+	q1.show();
+	system("pause");
+}
